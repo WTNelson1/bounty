@@ -1,0 +1,252 @@
+/* Shared personal-OS visual language: base, typography, cards, buttons,
+   inputs, checklists, micro-labels, header + app switcher.
+   Lives in ~/Claude/personal-os-kit — see its README. */
+@import '@personal-os/kit/css/kit.css';
+@import '@personal-os/kit/css/chrome.css';
+
+:root {
+  /* "ember" — chocolate-coffee neutrals, muted copper accent.
+     Same design language as Helm and Anchor (see docs/), third hue family:
+     never green-tinted (Helm), never indigo-tinted (Anchor), never pure gray.
+     This block is the only thing in the app that names a colour. */
+  --bg: #1a110e;
+  --bg-elev: #241813;
+  --bg-elev-2: #30211a;
+  --line: #513528;
+  --line-soft: #35231b;
+  --text: #f2e7e0;
+  --text-dim: #c1a496;
+  --text-mute: #8d7264;
+  --accent: #d08a5a;
+  --accent-soft: #9a603a;
+  --accent-glow: rgba(208, 138, 90, 0.45);
+  --danger: #e88a7a;
+
+  --kit-glow-1: rgba(208, 138, 90, 0.05);
+  --kit-glow-2: rgba(208, 138, 90, 0.035);
+
+  --radius: 8px;
+  /* no bottom nav — bounty is one section with a three-level drill-down, so
+     the shell only needs breathing room at the bottom */
+  --nav-h: 0px;
+  --sans: 'Geist Sans', Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: dark;
+}
+
+#root { min-height: 100dvh; }
+
+/* ---------- header ---------- */
+/* The word is the home link; the caret beside it opens the suite. */
+.app-header h1 {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.app-header h1 a { transition: color 0.15s; }
+.app-header h1 > a:hover { color: var(--accent); }
+/* the caret carries the whole switcher, so give it a real tap target */
+.app-switcher-trigger { padding: 4px 6px; margin: -4px -2px; }
+
+.crumb {
+  font-family: var(--mono);
+  font-size: 11px;
+  margin: 0 0 12px;
+}
+.crumb a { text-decoration: none; color: var(--text-mute); }
+.crumb a:hover { color: var(--accent); }
+
+/* ---------- shared row shape ---------- */
+/* Hairline-divided rows inside a card, never gapped boxes. */
+.person-row,
+.idea-row,
+.hit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.rows > .idea-row:last-child,
+.person-row:last-child,
+.hits > .hit:last-child { border-bottom: none; }
+
+.meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-mute);
+  flex-shrink: 0;
+}
+.meta.price { color: var(--text-dim); }
+
+/* ---------- people ---------- */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+/* nobody waiting on you for this one */
+.dot.off { background: var(--line); }
+
+.person-name {
+  flex: 1;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.person-name:hover { color: var(--accent); }
+
+/* ---------- ideas ---------- */
+.idea-title {
+  flex: 1;
+  min-width: 0;
+  color: var(--text);
+  text-decoration: none;
+  line-height: 1.4;
+}
+.idea-title:hover .title-text { color: var(--accent); }
+.title-text { transition: color 0.15s; }
+.row-note {
+  display: block;
+  color: var(--text-mute);
+  font-size: 12.5px;
+  line-height: 1.5;
+  margin-top: 1px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.idea-row.sub .idea-title { font-size: 13.5px; color: var(--text-dim); }
+
+/* the one status: an empty diamond fills when it's bought */
+.claim {
+  border: none;
+  background: transparent;
+  color: var(--text-mute);
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 2px 4px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.claim:hover { border: none; color: var(--accent); }
+.claim.on, .idea-row.bought .claim { color: var(--accent-soft); }
+.idea-row.bought .idea-title { color: var(--text-mute); }
+.idea-row.bought .title-text { text-decoration: none; }
+
+/* ---------- entity headings + tap-to-edit ---------- */
+.entity-name {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  line-height: 1.25;
+}
+
+.notes-body {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-dim);
+  white-space: pre-wrap;
+  margin: 0 0 4px;
+}
+.notes-body.empty,
+.editable.empty { color: var(--text-mute); font-family: var(--mono); font-size: 12px; }
+
+.notes-input {
+  min-height: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.price-line {
+  margin: 0 0 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-dim);
+}
+.price-line .micro-label { margin-right: 4px; }
+.price-line .editable-input { display: inline-block; width: 120px; font-size: 13px; }
+
+/* ---------- capture ---------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+}
+.add-person { margin-top: 8px; }
+/* the ✓ that replaces a toast */
+.flash { color: var(--accent); letter-spacing: 0.12em; }
+
+/* ---------- search ---------- */
+.hits { margin-top: 8px; }
+.hit { text-decoration: none; color: var(--text); }
+.hit-label { flex: 1; line-height: 1.4; }
+.hit:hover .hit-label { color: var(--accent); }
+
+/* ---------- links on an idea ---------- */
+.links { margin-top: 10px; }
+.link-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+}
+.link-row a {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.link-row a:hover { text-decoration: underline; }
+
+/* ---------- bought history ---------- */
+/* Out of the way of the live list, but never hidden. */
+.bought-block summary {
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--text-mute);
+}
+.bought-block summary::-webkit-details-marker { display: none; }
+.bought-block summary::after { content: ' ▾'; font-size: 9px; }
+.bought-block[open] summary::after { content: ' ▴'; }
+.bought-block summary:hover { color: var(--text-dim); }
+.bought-block.inline {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line-soft);
+}
+
+/* ---------- misc ---------- */
+.confirm-row { gap: 4px; flex-shrink: 0; }
+.error-text { color: var(--danger); font-family: var(--mono); font-size: 12px; }
+
+details.help { margin-top: 10px; }
+details.help summary {
+  cursor: pointer;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+details.help summary:hover { color: var(--accent); }
+details.help p,
+details.help ol {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* Card headings that carry a control on the right. */
+.card h2.row-between { display: flex; }
