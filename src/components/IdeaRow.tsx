@@ -11,11 +11,14 @@ import ConfirmDelete from './ConfirmDelete'
 export default function IdeaRow({
   idea,
   subCount = 0,
+  rolledPrice = '',
   sub = false,
 }: {
   idea: Idea
   /** live sub-ideas nested under this one, shown as a count */
   subCount?: number
+  /** a category's own price is empty — this is the range its candidates cover */
+  rolledPrice?: string
   /** render as a nested candidate rather than a top-level idea */
   sub?: boolean
 }) {
@@ -45,7 +48,15 @@ export default function IdeaRow({
 
       {subCount > 0 && <span className="meta">·{subCount}</span>}
       {idea.links.length > 0 && <span className="meta" title={`${idea.links.length} link(s)`}>↗</span>}
-      {idea.price && <span className="meta price">{idea.price}</span>}
+      {idea.price ? (
+        <span className="meta price">{idea.price}</span>
+      ) : (
+        rolledPrice && (
+          <span className="meta price rolled" title="range across its versions">
+            {rolledPrice}
+          </span>
+        )
+      )}
 
       <ConfirmDelete onConfirm={() => deleteIdeaTree(idea.id)} />
     </div>

@@ -78,6 +78,14 @@
   flex-shrink: 0;
 }
 .meta.price { color: var(--text-dim); }
+/* a category's price is inferred from its versions, so it sits a shade back */
+.meta.price.rolled { color: var(--text-mute); }
+/* the per-person item count reads as a column, not as stray digits */
+.meta.count {
+  min-width: 18px;
+  text-align: right;
+  color: var(--text-dim);
+}
 
 /* ---------- people ---------- */
 .dot {

@@ -18,7 +18,9 @@ Vite + React + TypeScript · Dexie (IndexedDB) · vite-plugin-pwa · encrypted s
 - **Idea** — a title, and *everything else optional*: notes, links, price. Capture must never require details.
 - **Sub-ideas** — `parentId` nests candidates under a category ("wireless headphones" → three specific pairs). **One level only**; a sub-idea's detail page has no versions card.
 - **`bought`** is the only status. Bought ideas drop into the collapsed history under their person. Marking a sub-idea bought does **not** bought its parent — the category stays live until you say otherwise.
-- Live-idea counts on the home screen count **top-level** live ideas, so three candidate headphones read as one thing to think about.
+- Live counts on the home screen count **every** live idea for a person, candidates included.
+- A category has no price of its own, so its row shows the **range across its live candidates** (`$249–328`, `.meta.price.rolled`), a shade dimmer than a real price.
+- **One-field capture.** `parseCapture()` (`src/capture.ts`) lifts a pasted link and a currency-marked amount out of what you typed — `sony xm5 https://… $328` files all three. A bare number stays in the title (`200 piece puzzle`); only `$`/`£`/`€`/`¥` amounts count. The flash reports what was lifted, so it is never silent. Same helper backs the person page's add field.
 
 ## Conventions
 - **Design language is Helm** (see `docs/helm-design-language.md`); Bounty's palette is "ember" (chocolate-coffee neutrals + muted copper) — deliberately distinct from Helm's green/mint and Anchor's indigo/brass. Mono micro-labels, hairlines, glyphs not icons, lowercase microcopy, inline 2-step confirms, no modals/toasts.

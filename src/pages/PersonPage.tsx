@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { db, alive, deletePerson, newRec, patch } from '../db'
+import { db, alive, deletePerson, linkLabel, newRec, patch } from '../db'
+import { parseCapture, priceRange } from '../capture'
 import EditableText from '../components/EditableText'
 import EditableNotes from '../components/EditableNotes'
 import ConfirmDelete from '../components/ConfirmDelete'
@@ -34,18 +35,23 @@ export default function PersonPage() {
   const bought = tops
     .filter((i) => i.bought)
     .sort((a, b) => (b.boughtAt ?? b.updatedAt) - (a.boughtAt ?? a.updatedAt))
-  const subCount = (id: string) => ideas.filter((i) => i.parentId === id && !i.bought).length
+  const subsOf = (id: string) => ideas.filter((i) => i.parentId === id && !i.bought)
+  const subCount = (id: string) => subsOf(id).length
+  /** a category carries no price of its own — show what its versions cost */
+  const rolledPrice = (id: string) => priceRange(subsOf(id).map((s) => s.price).filter(Boolean))
 
   async function add() {
-    const title = text.trim()
-    if (!title) return
+    // same one-field capture as the home screen: link and $price ride along
+    const { title, price, links } = parseCapture(text)
+    const finalTitle = title || (links[0] ? linkLabel(links[0]) : '')
+    if (!finalTitle) return
     await db.ideas.add({
       ...newRec(),
       personId,
-      title,
+      title: finalTitle,
       notes: '',
-      links: [],
-      price: '',
+      links,
+      price,
       bought: 0,
     })
     setText('')
@@ -89,7 +95,7 @@ export default function PersonPage() {
         >
           <input
             type="text"
-            placeholder={`an idea for ${person.name}…`}
+            placeholder={`an idea for ${person.name} · link · $20`}
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
@@ -100,7 +106,7 @@ export default function PersonPage() {
 
         <div className="rows">
           {live.map((i) => (
-            <IdeaRow key={i.id} idea={i} subCount={subCount(i.id)} />
+            <IdeaRow key={i.id} idea={i} subCount={subCount(i.id)} rolledPrice={rolledPrice(i.id)} />
           ))}
         </div>
 
@@ -112,7 +118,7 @@ export default function PersonPage() {
           <summary>bought · {bought.length}</summary>
           <div className="rows">
             {bought.map((i) => (
-              <IdeaRow key={i.id} idea={i} subCount={subCount(i.id)} />
+              <IdeaRow key={i.id} idea={i} subCount={subCount(i.id)} rolledPrice={rolledPrice(i.id)} />
             ))}
           </div>
         </details>
