@@ -32,7 +32,7 @@ function Capture({ people }: { people: Person[] }) {
     })
     setText('')
     // say what was lifted out, so the parsing is never silent
-    setFlash(`✓ ${person.name}${price ? ` · ${price}` : ''}${links.length ? ' · ↗' : ''}`)
+    setFlash(`✓ ${person.name}${price ? ` · ${price}` : ''}${links.length ? ' · ⚭' : ''}`)
     setTimeout(() => setFlash(''), 2400)
     inputRef.current?.focus()
   }

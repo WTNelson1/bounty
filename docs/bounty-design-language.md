@@ -76,7 +76,10 @@ hairlines, no shadows / gradients / modals / toasts / icon libraries, inline
 are bundled via `@fontsource/*` so the PWA works offline.
 
 Bounty's additions to the glyph vocabulary: `◇ / ◆` **bought** (the one status
-— an empty diamond that fills) · `↗` an external link · `↑ ↓` manual reorder.
+— an empty diamond that fills) · `⚭` an external link · `↑ ↓` manual reorder.
+The link glyph is U+26AD, two interlocked rings — the only chain-link
+character that stays monochrome everywhere. `⛓` garbles in fallback fonts and
+`🔗` is an emoji codepoint, which would land in colour on iOS.
 `⌕` search and `＋ × ▾ ⚙ ↻` carry over unchanged. No `✦` — Bounty has no AI and
 never will.
 

@@ -78,6 +78,8 @@
   flex-shrink: 0;
 }
 .meta.price { color: var(--text-dim); }
+/* ⚭ sits outside Geist Mono's coverage, so it needs a shade more size to read */
+.meta.link-flag { font-size: 13px; line-height: 1; }
 /* a category's price is inferred from its versions, so it sits a shade back */
 .meta.price.rolled { color: var(--text-mute); }
 /* the per-person item count reads as a column, not as stray digits */

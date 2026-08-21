@@ -63,11 +63,23 @@ function amount(price: string): { sym: string; n: number } | null {
 export function priceRange(prices: string[]): string {
   const parsed = prices.map(amount).filter((p): p is { sym: string; n: number } => !!p)
   if (!parsed.length) return ''
-  const sym = parsed.find((p) => p.sym)?.sym ?? ''
+  const sym = parsed.find((p) => p.sym)?.sym ?? '$'
   const nums = parsed.map((p) => p.n).sort((a, b) => a - b)
   const lo = nums[0]
   const hi = nums[nums.length - 1]
   const num = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(2))
   // the symbol leads the range once: "$249–328", not "$249–$328"
   return lo === hi ? sym + num(lo) : `${sym}${num(lo)}–${num(hi)}`
+}
+
+/**
+ * Prices are stored exactly as typed — "£25" and "$40-ish" both have to
+ * survive capture. A bare amount gets a $ at render time so the list reads as
+ * money; anything already carrying a currency mark, or that isn't an amount at
+ * all ("free", "swap"), is left alone.
+ */
+export function displayPrice(price: string): string {
+  const p = price.trim()
+  if (!p || /[$£€¥]/.test(p)) return p
+  return /^\d/.test(p) ? `$${p}` : p
 }

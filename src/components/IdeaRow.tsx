@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { db, deleteIdeaTree, patch, type Idea } from '../db'
+import { displayPrice } from '../capture'
 import ConfirmDelete from './ConfirmDelete'
 
 /**
@@ -47,9 +48,13 @@ export default function IdeaRow({
       </Link>
 
       {subCount > 0 && <span className="meta">·{subCount}</span>}
-      {idea.links.length > 0 && <span className="meta" title={`${idea.links.length} link(s)`}>↗</span>}
+      {idea.links.length > 0 && (
+        <span className="meta link-flag" title={`${idea.links.length} link(s)`}>
+          ⚭
+        </span>
+      )}
       {idea.price ? (
-        <span className="meta price">{idea.price}</span>
+        <span className="meta price">{displayPrice(idea.price)}</span>
       ) : (
         rolledPrice && (
           <span className="meta price rolled" title="range across its versions">

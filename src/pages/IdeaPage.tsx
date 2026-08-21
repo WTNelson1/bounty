@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db, alive, deleteIdeaTree, linkLabel, newRec, normaliseUrl, patch } from '../db'
+import { displayPrice } from '../capture'
 import EditableText from '../components/EditableText'
 import EditableNotes from '../components/EditableNotes'
 import ConfirmDelete from '../components/ConfirmDelete'
@@ -112,6 +113,7 @@ export default function IdeaPage() {
           {idea.price && <span className="micro-label tight">price</span>}{' '}
           <EditableText
             value={idea.price}
+            display={displayPrice(idea.price)}
             allowEmpty
             placeholder="＋ price"
             onSave={(price) => patch(db.ideas, ideaId, { price })}
@@ -128,7 +130,7 @@ export default function IdeaPage() {
           {idea.links.map((l) => (
             <div key={l} className="link-row">
               <a href={l} target="_blank" rel="noreferrer">
-                ↗ {linkLabel(l)}
+                ⚭ {linkLabel(l)}
               </a>
               <button
                 className="btn-small btn-ghost danger-hover"

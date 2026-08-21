@@ -13,12 +13,15 @@ export default function EditableText({
   className,
   allowEmpty = false,
   placeholder,
+  display,
 }: {
   value: string
   onSave: (next: string) => void
   className?: string
   allowEmpty?: boolean
   placeholder?: string
+  /** what to show when not editing; tapping still edits the raw `value` */
+  display?: string
 }) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(value)
@@ -47,7 +50,7 @@ export default function EditableText({
         }}
         title="tap to edit"
       >
-        {value || placeholder}
+        {display || value || placeholder}
       </span>
     )
   }
