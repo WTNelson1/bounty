@@ -78,8 +78,22 @@
   flex-shrink: 0;
 }
 .meta.price { color: var(--text-dim); }
-/* ⚭ sits outside Geist Mono's coverage, so it needs a shade more size to read */
-.meta.link-flag { font-size: 13px; line-height: 1; }
+/* The link mark stays ink-coloured at rest: it sits next to the delete ×, and
+   an accent control at rest beside a danger control is the one thing this
+   palette can't do. Copper only on hover. */
+.meta.link-flag {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  color: var(--text-mute);
+  text-decoration: none;
+  /* a 13px glyph is not a tap target — pad it into one without moving the row */
+  padding: 7px 6px;
+  margin: -7px 0;
+}
+.meta.link-flag:hover { color: var(--accent); }
+.link-glyph { display: block; }
+.link-row a { display: inline-flex; align-items: center; gap: 5px; }
 /* a category's price is inferred from its versions, so it sits a shade back */
 .meta.price.rolled { color: var(--text-mute); }
 /* the per-person item count reads as a column, not as stray digits */

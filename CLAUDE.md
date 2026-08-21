@@ -29,7 +29,7 @@ Vite + React + TypeScript · Dexie (IndexedDB) · vite-plugin-pwa · encrypted s
 - **No bottom nav** — one section, a three-level drill-down. `--nav-h: 0px`. Navigation is the wordmark (home), `←` crumbs, and `⚙`.
 - The wordmark word links home; the `▾` beside it opens the AppSwitcher (`label=""` renders the trigger as caret-only).
 - Price is **free text**, not a number — "$40-ish" and "£25" both have to capture.
-- Glyphs: `◇/◆` bought · `⌕` search · `＋` add · `×` remove · `↑↓` reorder · `⚭` link · `▾` collapse · `⚙` settings · `↻` sync. `⚭` (U+26AD) is the chain link — `⛓` garbles in fallback fonts and `🔗` renders as colour emoji on iOS.
+- Glyphs: `◇/◆` bought · `⌕` search · `＋` add · `×` remove · `↑↓` reorder · `▾` collapse · `⚙` settings · `↻` sync. The link mark is the one exception: `LinkGlyph.tsx`, an inline hairline SVG, because no chain-link codepoint inherits `currentColor` (see the design brief). It is a live link straight to the idea's first url.
 - Prices are stored verbatim; `displayPrice()` adds a `$` to a bare amount at render time only, so `£25` and `free` pass through untouched.
 
 ## Dev / deploy

@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
-import { db, deleteIdeaTree, patch, type Idea } from '../db'
+import { db, deleteIdeaTree, linkLabel, patch, type Idea } from '../db'
 import { displayPrice } from '../capture'
 import ConfirmDelete from './ConfirmDelete'
+import LinkGlyph from './LinkGlyph'
 
 /**
  * One idea in a list. Lists navigate, detail pages edit — tapping the title
@@ -49,9 +50,21 @@ export default function IdeaRow({
 
       {subCount > 0 && <span className="meta">·{subCount}</span>}
       {idea.links.length > 0 && (
-        <span className="meta link-flag" title={`${idea.links.length} link(s)`}>
-          ⚭
-        </span>
+        // straight out to the thing — the row's title still opens the idea
+        <a
+          className="meta link-flag"
+          href={idea.links[0]}
+          target="_blank"
+          rel="noreferrer"
+          title={
+            idea.links.length > 1
+              ? `${linkLabel(idea.links[0])} · ${idea.links.length - 1} more on the idea`
+              : linkLabel(idea.links[0])
+          }
+          aria-label={`open ${linkLabel(idea.links[0])}`}
+        >
+          <LinkGlyph />
+        </a>
       )}
       {idea.price ? (
         <span className="meta price">{displayPrice(idea.price)}</span>

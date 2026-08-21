@@ -76,10 +76,17 @@ hairlines, no shadows / gradients / modals / toasts / icon libraries, inline
 are bundled via `@fontsource/*` so the PWA works offline.
 
 Bounty's additions to the glyph vocabulary: `◇ / ◆` **bought** (the one status
-— an empty diamond that fills) · `⚭` an external link · `↑ ↓` manual reorder.
-The link glyph is U+26AD, two interlocked rings — the only chain-link
-character that stays monochrome everywhere. `⛓` garbles in fallback fonts and
-`🔗` is an emoji codepoint, which would land in colour on iOS.
+— an empty diamond that fills) · `↑ ↓` manual reorder.
+
+**The link mark is the one drawn exception.** Every chain-link codepoint fails
+here: `⛓` garbles in whatever fallback font catches it, `🔗` is an emoji, and
+`⚭` is really a marriage symbol. Decisively, none of them inherit
+`currentColor` — greyscaling the emoji tames its colour but leaves it sitting
+grey while the row around it takes the ember ink and the copper hover. So the
+mark is drawn: two overlapping pills on a 45°, one hairline stroke,
+`stroke="currentColor"`. That is not an icon library — it is one shape, in the
+same stroke idiom as the app icon, and the no-icon-library rule stands.
+Reach for this only when a mark must follow the palette and no character can.
 `⌕` search and `＋ × ▾ ⚙ ↻` carry over unchanged. No `✦` — Bounty has no AI and
 never will.
 

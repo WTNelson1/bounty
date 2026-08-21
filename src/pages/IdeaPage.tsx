@@ -7,6 +7,7 @@ import EditableText from '../components/EditableText'
 import EditableNotes from '../components/EditableNotes'
 import ConfirmDelete from '../components/ConfirmDelete'
 import IdeaRow from '../components/IdeaRow'
+import LinkGlyph from '../components/LinkGlyph'
 
 export default function IdeaPage() {
   const { personId = '', ideaId = '' } = useParams()
@@ -130,7 +131,7 @@ export default function IdeaPage() {
           {idea.links.map((l) => (
             <div key={l} className="link-row">
               <a href={l} target="_blank" rel="noreferrer">
-                ⚭ {linkLabel(l)}
+                <LinkGlyph size={13} /> {linkLabel(l)}
               </a>
               <button
                 className="btn-small btn-ghost danger-hover"
