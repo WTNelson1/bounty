@@ -7,7 +7,7 @@ Vite + React + TypeScript · Dexie (IndexedDB) · vite-plugin-pwa · encrypted s
 
 ## Where things live
 - `src/db.ts` — schema (soft deletes via `deleted` tombstones; every record has `updatedAt` for LWW merge) plus the cascade helpers and link normalising
-- `src/sync.ts` — gist sync + auto-sync hooks. **Bounty's own gist** (`bounty-data.enc.json`) — never shared storage with Anchor or Helm
+- `src/sync.ts` — gist sync + auto-sync hooks. **Bounty's own gist** (`bounty-data.enc.json`) — never shared storage with Anchor or Helm. A device with no gist ID calls `findGist()` to adopt the existing one before falling back to creating a new one; without that, device 2 forks its own gist and the two drift silently (Anchor has three gists from exactly this). Only data syncs — token/passphrase/gist id are per-device and never ride in the blob
 - `src/crypto.ts` — AES-256-GCM + PBKDF2, identical to Anchor's
 - `src/pages/` — Home (capture + people + search), PersonPage, IdeaPage, Settings
 - `src/components/` — EditableText, EditableNotes, ConfirmDelete, IdeaRow

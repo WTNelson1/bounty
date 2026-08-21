@@ -143,7 +143,7 @@ export default function Settings() {
         />
         <SettingInput
           settingKey="gistId"
-          label="gist id (auto-filled on first sync; paste on the second device)"
+          label="gist id (found automatically — set it only to force a specific gist)"
         />
         <div className="row">
           <button className="btn-primary" onClick={doSync}>
@@ -169,7 +169,11 @@ export default function Settings() {
               is unrecoverable.
             </li>
             <li>tap “sync now”. a private gist is created and its id appears above.</li>
-            <li>on your other devices: same token, same passphrase, paste the same gist id.</li>
+            <li>
+              on your other devices: same token, same passphrase, then sync. bounty finds the
+              existing gist on the account itself — don't paste an id unless you mean to point at
+              a particular one.
+            </li>
           </ol>
           <p className="muted small">
             bounty keeps its own gist · it never shares storage with anchor or helm.

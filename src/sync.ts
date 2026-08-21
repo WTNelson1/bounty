@@ -74,6 +74,33 @@ async function pushGist(token: string, gistId: string, content: string) {
   if (!res.ok) throw new Error(`GitHub error ${res.status} while pushing.`)
 }
 
+/**
+ * Find an existing Bounty gist on this account.
+ *
+ * Without this, a second device that has the token and passphrase but no gist
+ * ID silently creates its OWN gist, and the two devices drift apart with no
+ * error to tell you — which is how this account ended up with three Anchor
+ * gists. Discovery is best-effort: if the lookup fails we fall through to
+ * creating one, which is the old behaviour.
+ */
+async function findGist(token: string): Promise<string | null> {
+  try {
+    const res = await fetch(`${API}/gists?per_page=100`, { headers: ghHeaders(token) })
+    if (!res.ok) return null
+    const gists = (await res.json()) as Array<{
+      id: string
+      files: Record<string, unknown> | null
+      updated_at: string
+    }>
+    const mine = gists
+      .filter((g) => g.files && FILE_NAME in g.files)
+      .sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at))
+    return mine[0]?.id ?? null
+  } catch {
+    return null
+  }
+}
+
 async function createGist(token: string, content: string): Promise<string> {
   const res = await fetch(`${API}/gists`, {
     method: 'POST',
@@ -154,7 +181,16 @@ export async function syncNow(): Promise<string> {
   suppress = true
   try {
     let snap = await localSnapshot()
-    const gistId = getSetting('gistId')
+    let gistId = getSetting('gistId')
+
+    // a device with no gist ID joins the existing stash rather than forking it
+    if (!gistId) {
+      const found = await findGist(token)
+      if (found) {
+        gistId = found
+        setSetting('gistId', found)
+      }
+    }
 
     if (gistId) {
       const remoteRaw = await pullGist(token, gistId)
